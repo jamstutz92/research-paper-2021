@@ -14,6 +14,7 @@ require("factoextra")
 require("ggrepel")
 require("stringr")
 require("DescTools")
+require("scales")
 
 # Set working directory
 setwd("/Users/jamesamstutz/repos/Bioinformatics/Thesis")
@@ -37,6 +38,13 @@ highestExpression <- 0 # Highest possible gene expression found
 lowestExpression <- 9999 # Lowest possible gene expression found
 
 correlationMethod <- "pearson" # Works as 'pearson', 'kendall' or 'spearman'
+
+# Only run if producing sample cluster plot
+testFrame <- data.frame(replicate(10,sample(0:1000,100,rep=TRUE)))
+kMeansResult <- kmeans(testFrame, 3, nstart = 25)
+print(fviz_cluster(kMeansResult, testFrame, choose.vars = names(testFrame), show.clust.cent = TRUE,
+                   ellipse.type = "convex", labelsize = 7, main = NULL))
+ggsave(paste("RH1G69D Data/Other Plots/sampleCluster.jpeg", sep = ""))
 
 # METHOD - FETCH RH1 AND DGRP DATA FROM TEXT FILES
 fetchData <- function() {
@@ -64,8 +72,7 @@ fetchData <- function() {
   ggplot(Rh1Data, aes(Mean_Eye_Size, Strain)) + geom_point() +
     labs(x = "Mean Eye Size (pixels)") +
     theme(axis.text.y = element_blank(), axis.title.y = element_blank(), axis.title.x = element_text(size = 16), plot.title = element_text(size = 16)) +
-    ggtitle("Rh1G69D Expression Strains") + 
-    scale_x_continuous(limits = c(14000,27500), expand = c(0.1, 0))
+    scale_x_continuous(label = comma, limits = c(14000,27500), expand = c(0.1, 0))
   ggsave("RH1G69D Data/Other Plots/Rh1ExpressionStrains.jpeg", width=12, height=8)
 
   # Read dgrp.array.exp.female.txt file
