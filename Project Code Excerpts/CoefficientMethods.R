@@ -48,6 +48,7 @@ getAllCoeffValues <- function(pathName, eyeOrExpress, titleName, sentData, shoul
   
   correlationCoefficients <- c()
   corrCoeffGeneNames <- c()
+  unicode_minus = function(x) sub('^-', '\U2212', format(x))
   
   # Plot the correlated gene expressions and average eye sizes of extreme coefficient genes
   inc <- 1
@@ -88,6 +89,7 @@ getAllCoeffValues <- function(pathName, eyeOrExpress, titleName, sentData, shoul
         
         mid<-mean(Clusters)
         print(ggplot(tempDataFrame, aes(x=sortedAverageEyeSizes, y=fetchedGene, label=sortedRh1ClusterData$Strain, color=Clusters)) + 
+                scale_x_continuous(label = comma) +
                 labs(x="Average Eye Size (Pixels)", y="Average Genetic Expression", title=paste("Gene", names(filteredGeneList[i]), ", P-value:", pValue)) +
                 geom_point() + geom_text(aes(label=sortedRh1ClusterData$Strain), hjust=0, vjust=0,size=2) + scale_color_gradient2(midpoint=mid, low="blue", mid="red", high="orange"))
         ggsave(paste(pathName, "Gene", inc, ".jpeg", sep = ""))
@@ -122,7 +124,7 @@ getAllCoeffValues <- function(pathName, eyeOrExpress, titleName, sentData, shoul
     labs(title=paste("Suspected Genes", titleName, sep = " "), x="Genes", y="Coefficient Value") +
     theme(axis.text.x = element_text(angle = 90)) + 
     geom_text_repel(aes(label=pList), hjust=0, vjust=2, size=2)) +
-    scale_x_discrete(expand=c(0.1, 0)) + 
+    scale_x_discrete(expand=c(0.1, 0)) + scale_y_continuous(labels = unicode_minus) +
     scale_colour_manual(values = c("Significant" = "dark red", "Not Significant" = "dark blue"))
   ggsave(paste(pathName, "CoefficientPlot.jpeg", sep = ""))
 }
