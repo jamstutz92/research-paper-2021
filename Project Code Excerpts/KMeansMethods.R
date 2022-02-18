@@ -136,12 +136,12 @@ kMeansRh1Categorization <- function(fileName, titleName, sentData) {
   } else if(titleName == "(Highest Expression Cluster)") {
     initialListData <<- combKMeansList
   }
-  
+
   # Plot combined K-Means list
   if(titleName == "(Lowest Expression Cluster)") {
     jpeg(paste("RH1G69D Data/Other Plots/", "Rh1SortedCombinedExpressStrains.jpeg", sep = ""))
     plot(unlist(combinedListData),type="p",xlim=c(1,max(sapply(combinedListData,length))), 
-         main = "Sorted Rh1G69D Strains", xlab = "Index Position", ylab = "Mean Eye Size (Pixels)")
+         main = "Sorted Rh1G69D Strains", xlab = "Index Position", ylab = "Mean Eye Size (Pixels)", xaxt='n')
     mapply(points,combinedListData,col=seq_along(combinedListData),lty=2)
     legend("bottomright",names(combinedListData),lty=2,bty="n",cex=0.75,col=seq_along(combinedListData))
     dev.off()
